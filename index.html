@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mundo de Margaritas</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- c3 Charts -->
+    <link href="css/plugins/c3/c3.min.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+
+</head>
+
+<body class="gray-bg">
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h1> <b> Mundo de Margaritas </b> <small>(Presentador por: Eduard Efren Arango Lopez - 1325584)</small></h1>
+                <p>Esta simulacion se basa en: <a href="http://terpconnect.umd.edu/~akleidon/MODELS/DAISY/DAISY.html">http://terpconnect.umd.edu/~akleidon/MODELS/DAISY/DAISY.html</a>. Los datos de entrada de simulacion que se cargan en el formulario por defecto fueron tomados de: <a href="http://www3.geosc.psu.edu/~dmb53/DaveSTELLA/Daisyworld/daisyworld_model.htm"> http://www3.geosc.psu.edu/~dmb53/DaveSTELLA/Daisyworld/daisyworld_model.htm</a>, sin embargo pueden ser cambiados para simular entornos diferentes. </p>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+
+            	<div class="col-lg-4">
+			        <div class="ibox float-e-margins">
+			            <div class="ibox-title">
+			                <h5>Datos de Entrada</h5>
+			            </div>
+			            <div class="ibox-content">
+			                <form class="form-horizontal">
+                                <div class="form-group"><label class="col-lg-9 control-label">Albedo de las margaritas blancas</label>
+                                    <div class="col-lg-3"><input id="albedoBlancas" type="text" class="form-control" value="0.75"></div>
+                                </div>
+                                <div class="form-group"><label class="col-lg-9 control-label">Albedo de las margaritas negras</label>
+                                    <div class="col-lg-3"><input id="albedoNegras" type="text" class="form-control" value="0.25"></div>
+                                </div>
+                                <div class="form-group"><label class="col-lg-9 control-label">Albedo de un terreno descubierto</label>
+                                    <div class="col-lg-3"><input id="albedoDescubierto" type="text" class="form-control" value="0.5"></div>
+                                </div>
+                                <div class="form-group"><label class="col-lg-9 control-label">Indice de mortalidad de las margaritas</label>
+                                    <div class="col-lg-3"><input id="mortalidadMargaritas" type="text" class="form-control" value="0.3"></div>
+                                </div>
+                                <div class="form-group"><label class="col-lg-9 control-label">Factor de absorcion de calor</label>
+                                    <div class="col-lg-3"><input id="factorAbsorcion" type="text" class="form-control" value="20"></div>
+                                </div>
+                                <div class="form-group"><label class="col-lg-9 control-label">Covertura inicial de margaritas blancas</label>
+                                    <div class="col-lg-3"><input id="inicialBlancas" type="text" class="form-control" value="0.005"></div>
+                                </div>
+                                <div class="form-group"><label class="col-lg-9 control-label">Covertura inicial de margaritas negras</label>
+                                    <div class="col-lg-3"><input id="inicialNegras" type="text" class="form-control" value="0.005"></div>
+                                </div>
+			                    <div class="form-group">
+			                        <div class="col-lg-offset-2 col-lg-10">
+                                        <input class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button" value="Iniciar Simulacion" onclick="iniciarSimulacion();"/>
+			                        </div>
+			                    </div>
+			                </form>
+			            </div>
+			        </div>
+			    </div>
+
+                <div class="col-lg-8">
+                    <div class="column">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>
+                                    Porcentaje de Margaritas en el Planeta
+                                </h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div>
+                                    <div id="lineChart"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Temperatura del Planeta
+                                </h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div>
+                                    <div id="lineChart2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Radiacion del Sol
+                                </h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div>
+                                    <div id="lineChart3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+    <script src="js/plugins/pace/pace.min.js"></script>
+
+    <!-- d3 and c3 charts -->
+    <script src="js/plugins/d3/d3.min.js"></script>
+    <script src="js/plugins/c3/c3.min.js"></script>
+
+    <script>
+        function iniciarSimulacion() {
+            
+            var pGamma = document.getElementById("mortalidadMargaritas").value; //indice de mortalidad de las margaritas
+            var fWhite0 = document.getElementById("inicialBlancas").value; //cobertura inicial de margatiras blancas
+            var fBlack0 = document.getElementById("inicialNegras").value; //cobertura inicial de margatiras negras
+            var pAlbW = document.getElementById("albedoBlancas").value; //albedo de las margaritas blancas
+            var pAlbA = document.getElementById("albedoDescubierto").value; //albedo del suelo descubierto
+            var pAlbB = document.getElementById("albedoNegras").value;; //albedo de las margaritas negras
+            var pQ = document.getElementById("factorAbsorcion").value;; //coeficiente de mezcla o factor de absorcion de calor
+
+            var datosRadiacionSolar=['Radiacion Solar'];
+            var datosCantidadBlancas=['Margaritas Blancas'];
+            var datosCantidadNegras=['Margaritas Negras'];
+            var datosFraccionDescubierta=['Descubierto'];
+            var datosTemperaturaGobalSuperficie = ['Temperatura Global Superficial del Planeta'];
+          
+          for (var i=0; i<=100; i++)
+            {
+             pE      = 130.0
+             pLambda = 2.0
+             pTMIN   = 2.5
+             pTOPT   = 25.0
+             pTMAX   = 37.5
+             fWhite  = fWhite0
+             fBlack  = fBlack0
+            
+             pSRad   = (1.2 * i/100 + 0.6) * 340
+
+             for (var j=1;j<100;j++)
+             {
+                fWhite  = Math.max(0, Math.min(1, fWhite))
+                fBlack  = Math.max(0, Math.min(1-fWhite, fBlack))
+                fBare   = 1 - fWhite - fBlack
+                pAlbE   = fBlack * pAlbB + fWhite * pAlbW + fBare * pAlbA
+                fTE     = ((1. - pAlbE) * pSRad - pE)/pLambda
+                fTW     = fTE + pQ * (pAlbE - pAlbW)
+                fTB     = fTE + pQ * (pAlbE - pAlbB)
+                pBeta   = 1. - 4. * (pTOPT - fTW)/(pTMAX - pTMIN) * (pTOPT - fTW)/(pTMAX - pTMIN)
+                fDW     = fWhite * (fBare * pBeta - pGamma)
+                pBeta   = 1. - 4. * (pTOPT - fTB)/(pTMAX - pTMIN) * (pTOPT - fTB)/(pTMAX - pTMIN)
+                fDB     = fBlack * (fBare * pBeta - pGamma)
+              
+                fWhite  = fWhite + 0.1 * fDW
+                fBlack  = fBlack + 0.1 * fDB
+             }
+             
+                datosRadiacionSolar.push(pSRad);
+                datosCantidadBlancas.push(fWhite);
+                datosCantidadNegras.push(fBlack);
+                datosFraccionDescubierta.push(fBare);
+                datosTemperaturaGobalSuperficie.push(fTE);
+             
+            }
+
+            c3.generate({
+                    bindto: '#lineChart',
+                    data:{
+                        columns: [
+                            datosCantidadBlancas,
+                            datosCantidadNegras,
+                            datosFraccionDescubierta
+                        ],
+                        colors:{
+                            'Margaritas Blancas': '#1ab394',
+                            'Margaritas Negras': '#BABABA'
+                        },
+                        type: 'spline'
+                    }
+                });
+
+            c3.generate({
+                    bindto: '#lineChart2',
+                    data:{
+                        columns: [
+                            datosTemperaturaGobalSuperficie
+                        ],
+                        type: 'spline'
+                    }
+                });
+
+            c3.generate({
+                    bindto: '#lineChart3',
+                    data:{
+                        columns: [
+                            datosRadiacionSolar
+                        ],
+                        type: 'spline'
+                    }
+                });
+        }
+
+    </script>
+
+</body>
+
+</html>
